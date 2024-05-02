@@ -1,6 +1,6 @@
 <?php
 // Include la classe Database.php
-include 'Database.php';
+include 'database.php';
 
 // Funzioni PHP
 function openProject() {
