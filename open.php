@@ -1,47 +1,68 @@
 <?php
 
-try{
+class Database {
 
-class database{
+    private static $server = 'your_server';
+    private static $username = 'your_username';
+    private static $password = 'your_password';
+    private static $database = 'your_database';
+    private $connection;
 
+    public function __construct() {
+        try {
+            // Crea una nuova connessione al database
+            $this->connection = new mysqli(self::$server, self::$username, self::$password, self::$database);
 
+            // Verifica se ci sono errori di connessione
+            if ($this->connection->connect_error) {
+                throw new Exception("Connessione fallita: " . $this->connection->connect_error);
+            }
 
-    private static $server ='';
-    private static $password = '';
-    private static $utente = '';
-    private static $database = '';
+            echo "Connessione al database avvenuta con successo!";
+        } catch (Exception $e) {
+            // Gestisce gli errori di connessione
+            die("Errore: " . $e->getMessage());
+        }
+    }
 
+    public function query($sql) {
+        try {
+            // Esegui la query sul database
+            $result = $this->connection->query($sql);
 
+            if (!$result) {
+                throw new Exception("Query fallita: " . $this->connection->error);
+            }
 
+            // Restituisce i risultati della query
+            return $result;
+        } catch (Exception $e) {
+            // Gestisce gli errori della query
+            die("Errore: " . $e->getMessage());
+        }
+    }
 
-public function __construct() {
-    
-
-  
+    public function closeConnection() {
+        // Chiudi la connessione al database
+        $this->connection->close();
+    }
 }
 
+// Esempio di utilizzo della classe Database
+try {
+    $db = new Database();
 
+    $sql = "SELECT id FROM tablename WHERE 1";
+    $result = $db->query($sql);
 
-$sql = 'SELECT id  FROM tablename WHERE 1';
+    // Itera attraverso i risultati e stampa ogni riga
+    while ($row = $result->fetch_assoc()) {
+        echo "ID: " . $row['id'] . "\n";
+    }
 
-
-echo row[];
-
-
-$open = new mysqli("$server", "$password,", "$utente", "$database");
-echo $open -> database();
-
-
-}catch(Exception $e){
-
-die();
-
-
+    // Chiudi la connessione
+    $db->closeConnection();
+} catch (Exception $e) {
+    die("Errore: " . $e->getMessage());
 }
-
-
-
-}
-
-
-
+?>
