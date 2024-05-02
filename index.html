@@ -1,58 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css"type="text/css">
-    <link rel="stylesheet" href="style.css"type="text/css">
-    <script src="jbul.js"></script>
-    <title>AUTOCAD CLONE</title>
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <title>OpenGL and Three.js App</title>
+    <script src="https://threejs.org/build/three.js"></script>
+    <script src="app.js"></script>
 </head>
+
 <body>
-
     <nav class="nav navbar">
+        <ul class="nav">
+            <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="open.php">Open</a></li>
+            <li class="nav-item"><a class="nav-link" href="save.php">Save</a></li>
+            <li class="nav-item"><a class="nav-link" href="export.php">Export</a></li>
+            <li class="nav-item"><a class="nav-link" href="code.php">Three.js Code</a></li>
+        </ul>
+    </nav>
 
+    <main>
+        <section id="editor">
+            <h2>Three.js Code Editor</h2>
+            <textarea id="threejs-code" rows="10" cols="50" placeholder="Write your Three.js code here..."></textarea>
+            <button id="run-code">Run Code</button>
+        </section>
 
-    <ul class="nav">
-      <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">WEB DESIGNER</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="open.php">APRI</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="save.php">SALVA</a>
-      </li>
+        <section id="canvas-container">
+            <h2>Three.js Canvas</h2>
+            <div id="canvas"></div>
+        </section>
+    </main>
 
-      <li class="nav-item">
-        <a class="nav-link" href="save_with_name.php">SALVA CON NOME</a>
-      </li>
+    <script>
+        const canvasContainer = document.getElementById("canvas");
+        const threejsCode = document.getElementById("threejs-code");
+        const runCodeButton = document.getElementById("run-code");
 
-      <li class="nav-item">
-        <a class="nav-link" href="export.php">ESPORTA</a>
-      </li>
+        // Funzione per eseguire il codice Three.js inserito dall'utente
+        function runThreejsCode() {
+            try {
+                // Rimuovi il contenuto precedente del canvas
+                while (canvasContainer.firstChild) {
+                    canvasContainer.removeChild(canvasContainer.firstChild);
+                }
 
-      <li class="nav-item">
-        <a class="nav-link" href="publish.php">PUBBLICA</a>
-      </li>
+                // Crea un nuovo contesto Three.js
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                const renderer = new THREE.WebGLRenderer();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                canvasContainer.appendChild(renderer.domElement);
 
-      <li class="nav-item">
-        <a class="nav-link" href="code.php">UTILITÀ DISEGNO</a>
-      </li>
+                // Esegui il codice Three.js dell'utente
+                eval(threejsCode.value);
 
-      <li class="nav-item">
-        <a class="nav-link" href="close.php">CHIUDI</a>
-      </li>
-    
-    </ul>
+                // Funzione di animazione
+                function animate() {
+                    requestAnimationFrame(animate);
+                    renderer.render(scene, camera);
+                }
+                animate();
+            } catch (error) {
+                console.error("Errore nell'esecuzione del codice Three.js:", error);
+            }
+        }
 
-
-</nav>
-
-
-
-
-
-    
+        // Evento per il pulsante "Run Code"
+        runCodeButton.addEventListener("click", runThreejsCode);
+    </script>
 </body>
+
 </html>
