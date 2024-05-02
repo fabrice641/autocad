@@ -1,3 +1,8 @@
+<?php
+// Include il file PHP con la classe Database
+include 'Database.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,9 +20,9 @@
     <nav class="nav navbar">
         <ul class="nav">
             <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="open.php">Open</a></li>
-            <li class="nav-item"><a class="nav-link" href="save.php">Save</a></li>
-            <li class="nav-item"><a class="nav-link" href="export.php">Export</a></li>
+            <li class="nav-item"><a class="nav-link" href="javascript:openFile()">Open</a></li>
+            <li class="nav-item"><a class="nav-link" href="javascript:saveFile()">Save</a></li>
+            <li class="nav-item"><a class="nav-link" href="javascript:exportFile()">Export</a></li>
             <li class="nav-item"><a class="nav-link" href="code.php">Three.js Code</a></li>
         </ul>
     </nav>
@@ -71,6 +76,71 @@
 
         // Evento per il pulsante "Run Code"
         runCodeButton.addEventListener("click", runThreejsCode);
+
+        // Funzione per aprire un file
+function openFile() {
+    fetch('open.php', {
+        method: 'GET',
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Elabora i dati ricevuti (il file aperto)
+        console.log('File aperto:', data);
+        // Visualizza il file o utilizza i dati ricevuti come necessario
+        // Ad esempio, mostra il contenuto del file su un elemento HTML
+    })
+    .catch(error => {
+        console.error('Errore nell'apertura del file:', error);
+    });
+}
+
+// Funzione per salvare un file
+function saveFile() {
+    // Ad esempio, puoi inviare i dati da salvare in formato JSON
+    const dataToSave = {
+        // Sostituisci con i dati che vuoi salvare
+        content: 'contenuto del file da salvare'
+    };
+
+    fetch('save.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dataToSave)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('File salvato:', data);
+        // Mostra una notifica di successo all'utente o esegui altre azioni
+    })
+    .catch(error => {
+        console.error('Errore nel salvataggio del file:', error);
+    });
+}
+
+// Funzione per esportare un file
+function exportFile() {
+    // Invia una richiesta a un endpoint per esportare un file
+    fetch('export.php', {
+        method: 'GET',
+    })
+    .then(response => response.blob())
+    .then(blob => {
+        // Crea un link di download per il file esportato
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'file_esportato.txt'; // Sostituisci con il nome e l'estensione del file esportato
+        link.click();
+        URL.revokeObjectURL(url);
+        console.log('File esportato con successo');
+    })
+    .catch(error => {
+        console.error('Errore nell\'esportazione del file:', error);
+    });
+}
+
     </script>
 </body>
 
