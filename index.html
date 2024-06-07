@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows Media Player Styled Video Player</title>
+    <style>
+        body {
+            background-color: #333;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .wmp-video-player {
+            width: 640px;
+            background: #000;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .wmp-video-player video {
+            width: 100%;
+            display: block;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: #444;
+        }
+
+        .play-pause-btn, .mute-btn, .fullscreen-btn, .download-btn {
+            background: #555;
+            border: none;
+            color: #fff;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .play-pause-btn:hover, .mute-btn:hover, .fullscreen-btn:hover, .download-btn:hover {
+            background: #777;
+        }
+
+        .progress-container {
+            flex: 1;
+            margin: 0 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .progress-bar {
+            position: relative;
+            width: 100%;
+            height: 10px;
+            background: #222;
+            cursor: pointer;
+        }
+
+        .progress {
+            position: absolute;
+            height: 100%;
+            background: #4caf50;
+            width: 0;
+        }
+
+        .time {
+            font-size: 14px;
+        }
+
+        .volume-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .volume-bar {
+            position: relative;
+            width: 100px;
+            height: 5px;
+            background: #222;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .volume-level {
+            position: absolute;
+            height: 100%;
+            background: #4caf50;
+            width: 50%;
+        }
+
+        .resolution-select {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="wmp-video-player">
+        <video id="video" src="" controls></video>
+        <div class="controls">
+            <button class="play-pause-btn" id="playPauseBtn">Play</button>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar">
+                    <div class="progress" id="progress"></div>
+                </div>
+                <span class="time" id="currentTime">0:00</span> / <span class="time" id="duration">0:00</span>
+            </div>
+            <button class="mute-btn" id="muteBtn">Mute</button>
+            <div class="volume-container">
+                <div class="volume-bar" id="volumeBar">
+                    <div class="volume-level" id="volumeLevel"></div>
+                </div>
+            </div>
+            <button class="fullscreen-btn" id="fullscreenBtn">Fullscreen</button>
+            <button class="download-btn" id="downloadBtn">Download</button>
+            <select class="resolution-select" id="resolutionSelect">
+                <option value="240">240p</option>
+                <option value="360">360p</option>
+                <option value="480">480p</option>
+                <option value="720">720p</option>
+                <option value="1080">1080p</option>
+                <option value="2160">4K</option>
+                <option value="4320">8K</option>
+            </select>
+        </div>
+    </div>
+
+    <input type="file" id="videoInput" multiple accept="video/*">
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.getElementById('video');
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const muteBtn = document.getElementById('muteBtn');
+            const progressBar = document.getElementById('progressBar');
+            const progress = document.getElementById('progress');
+            const currentTimeElem = document.getElementById('currentTime');
+            const durationElem = document.getElementById('duration');
+            const volumeBar = document.getElementById('volumeBar');
+            const volumeLevel = document.getElementById('volumeLevel');
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const resolutionSelect = document.getElementById('resolutionSelect');
+            const videoInput = document.getElementById('videoInput');
+
+            // Play/Pause functionality
+            playPauseBtn.addEventListener('click', () => {
+                if (video.paused) {
+                    video.play();
+                    playPauseBtn.textContent = 'Pause';
+                } else {
+                    video.pause();
+                    playPauseBtn.textContent = 'Play';
+                }
+            });
+
+            // Mute/Unmute functionality
+            muteBtn.addEventListener('click', () => {
+                video.muted = !video.muted;
+                muteBtn.textContent = video.muted ? 'Unmute' : 'Mute';
+            });
+
+            // Update progress bar as video plays
+            video.addEventListener('timeupdate', () => {
+                const progressPercent = (video.currentTime / video.duration) * 100;
+                progress.style.width = `${progressPercent}%`;
+                currentTimeElem.textContent = formatTime(video.currentTime);
+                durationElem.textContent = formatTime(video.duration);
+            });
+
+            // Seek functionality
+            progressBar.addEventListener('click', (e) => {
+                const rect = progressBar.getBoundingClientRect();
+                const offsetX = e.clientX - rect.left;
+                const progress = offsetX / rect.width;
+                video.currentTime = progress * video.duration;
+            });
+
+            // Volume control functionality
+            volumeBar.addEventListener('click', (e) => {
+                const rect = volumeBar.getBoundingClientRect();
+                const offsetX = e.clientX - rect.left;
+                const volume = offsetX / rect.width;
+                video.volume = volume;
+                volumeLevel.style.width = `${volume * 100}%`;
+            });
+
+            // Fullscreen functionality
+            fullscreenBtn.addEventListener('click', () => {
+                if (!document.fullscreenElement) {
+                    video.requestFullscreen();
+                } else {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    }
+                }
+            });
+
+            // Download functionality
+            downloadBtn.addEventListener('click', () => {
+                const a = document.createElement('a');
+                a.href = video.currentSrc;
+                a.download = 'video.mp4';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            });
+
+            // Handle file input
+            videoInput.addEventListener('change', () => {
+                const file = videoInput.files[0];
+                const fileURL = URL.createObjectURL(file);
+                               video.src = fileURL;
+
+                // Reset play button text
+                playPauseBtn.textContent = 'Play';
+            });
+
+            // Initialize duration display when video metadata is loaded
+            video.addEventListener('loadedmetadata', () => {
+                durationElem.textContent = formatTime(video.duration);
+            });
+
+            // Format time in minutes and seconds
+            function formatTime(time) {
+                const minutes = Math.floor(time / 60);
+                const seconds = Math.floor(time % 60);
+                return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            }
+        });
+    </script>
+</body>
+</html>
+
