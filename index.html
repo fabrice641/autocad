@@ -12,7 +12,7 @@
     <div class="wmp-video-player">
         <input type="file" id="fileInput" multiple>
         <div id="cardContainer"></div>
-        <video id="video" src="" controls></video>
+        <video id="video" src=" " controls></video>
         <div class="controls">
             <button class="play-pause-btn" id="playPauseBtn">Play</button>
             <div class="progress-container">
@@ -79,8 +79,10 @@
     const videoElement = document.getElementById('video');
     const tracks = [];
 
-    // Altri eventi e funzioni rimangono invariati, quindi non li riporterò qui per brevità.
+    const videoElement = fileInput;
 
+
+            
     downloadBtn.addEventListener('click', async () => {
         try {
             const resolution = resolutionSelect.value;
@@ -119,10 +121,9 @@
         }
     });
 
-    // Eventi per lo split del video e dell'audio rimossi per brevità.
 });
 
-
+document.getElementById('video').innerHTML = videoElement;
 
     </script>
         
