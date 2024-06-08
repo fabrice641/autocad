@@ -13,7 +13,7 @@
 
     const videoElement = fileInput;
 
-    document.getElementById('video').innerHTML = videoElement;
+    document.getElementById('video').innerHTML = '<video src="' + videoElement + ' controls ></video>';
 
             
     downloadBtn.addEventListener('click', async () => {
