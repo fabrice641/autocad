@@ -4,14 +4,17 @@ body {
     font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
+    align-items: flex-start; /* Changed from center to flex-start */
+    min-height: 100vh; /* Changed from height to min-height */
     margin: 0;
+    padding: 20px;
     flex-direction: column;
+    overflow-y: auto; /* Ensures body is scrollable */
 }
 
 .wmp-video-player {
-    width: 640px;
+    width: 100%;
+    max-width: 640px; /* Maintain a max-width for large screens */
     background: #000;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     border-radius: 10px;
@@ -30,6 +33,7 @@ body {
     align-items: center;
     padding: 10px;
     background: #444;
+    flex-wrap: wrap; /* Allows controls to wrap on small screens */
 }
 
 .play-pause-btn, .mute-btn, .fullscreen-btn, .download-btn, .split-video-btn, .split-audio-btn, .edit-btn {
@@ -40,6 +44,7 @@ body {
     border-radius: 50%;
     cursor: pointer;
     transition: background 0.3s;
+    margin: 5px; /* Added margin for spacing */
 }
 
 .play-pause-btn:hover, .mute-btn:hover, .fullscreen-btn:hover, .download-btn:hover, .split-video-btn:hover, .split-audio-btn:hover, .edit-btn:hover {
@@ -51,6 +56,7 @@ body {
     margin: 0 10px;
     display: flex;
     align-items: center;
+    min-width: 100px; /* Minimum width to ensure visibility */
 }
 
 .progress-bar {
@@ -70,11 +76,13 @@ body {
 
 .time {
     font-size: 14px;
+    margin: 0 10px; /* Added margin for spacing */
 }
 
 .volume-container {
     display: flex;
     align-items: center;
+    margin-left: 10px; /* Added margin for spacing */
 }
 
 .volume-bar {
@@ -95,9 +103,12 @@ body {
 
 .resolution-select {
     margin-left: 10px;
+    flex-grow: 1; /* Allows select to grow in available space */
 }
 
 .edit-panel {
+    width: 100%;
+    max-width: 640px; /* Maintain a max-width for large screens */
     background: #444;
     padding: 10px;
     border-radius: 10px;
@@ -115,8 +126,8 @@ body {
 }
 
 .card {
-    width: 200px;
-    height: 100px;
+    width: calc(50% - 20px); /* Responsive width with gap consideration */
+    height: 150px; /* Increased height for better visibility */
     padding: 10px;
     background: #555;
     border-radius: 10px;
@@ -145,4 +156,5 @@ body {
     gap: 10px;
     flex-wrap: wrap;
     justify-content: center;
+    width: 100%;
 }

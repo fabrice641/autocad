@@ -10,6 +10,8 @@
 </head>
 <body>
     <div class="wmp-video-player">
+        <input type="file" id="fileInput" multiple>
+        <div id="cardContainer"></div>
         <video id="video" src="" controls></video>
         <div class="controls">
             <button class="play-pause-btn" id="playPauseBtn">Play</button>
@@ -41,8 +43,8 @@
         </div>
     </div>
 
-    <input type="file" id="videoInput" multiple accept="video/*">
-    
+   
+        
     <div class="edit-panel">
         <label>
             Noise Reduction: <input type="range" id="noiseReduction" min="0" max="100" value="0">
