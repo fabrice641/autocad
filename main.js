@@ -153,4 +153,58 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }).join('; ');
 
-           
+            const command = `-filter_complex "${filters}" -map "[v0]" -map "${tracks.length > 1 ? '[a]' : '[a0]'}" output.mp4`;
+
+            await ffmpeg.run(...inputs.split(' '), command);
+            const data = await ffmpeg.FS('readFile', 'output.mp4');
+            const blob = new Blob([data.buffer], { type: 'video/mp4' });
+            const videoUrl = URL.createObjectURL(blob);
+
+            const video = document.getElementById('video');
+            video.src = videoUrl;
+            video.controls = true;
+        } catch (error) {
+            console.error(error);
+            alert("An error occurred while generating the video.");
+        }
+    });
+
+
+
+    splitVideoBtn.addEventListener('click', () => {
+    // Chiamata alla funzione per lo split del video
+    // Assicurati di passare i parametri necessari come il file video e i tempi di inizio e fine
+    // Esempio: splitVideo(tracks[0].file, 10, 30);
+    if(tracks.length > 0 && tracks[0].type === 'video') {
+        const startTime = prompt("Enter start time (in seconds):");
+        const endTime = prompt("Enter end time (in seconds):");
+        if(startTime !== null && endTime !== null) {
+            splitVideo(tracks[0].file, parseFloat(startTime), parseFloat(endTime));
+        }
+    } else {
+        alert("No video track available.");
+    }
+});
+
+splitAudioBtn.addEventListener('click', () => {
+    // Chiamata alla funzione per lo split dell'audio
+    // Assicurati di passare i parametri necessari come il file audio e i tempi di inizio e fine
+    // Esempio: splitAudio(tracks[1].file, 5, 10);
+    if(tracks.length > 0 && tracks[0].type === 'audio') {
+        const startTime = prompt("Enter start time (in seconds):");
+        const endTime = prompt("Enter end time (in seconds):");
+        if(startTime !== null && endTime !== null) {
+            splitAudio(tracks[0].file, parseFloat(startTime), parseFloat(endTime));
+        }
+    } else {
+        alert("No audio track available.");
+    }
+});
+
+
+
+
+
+    
+});
+
