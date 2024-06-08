@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Windows Media Player Styled Video Player</title>
-    <link rel="stylesheet"href="style.css"type="text/css"/>
-    <link rel="stylesheet"href="styles.css"type="text/css"/>
-    <script type="text/javascript"src="jbul.js"></script>
+    <title>Advanced Video Player</title>
     <style>
         body {
             background-color: #333;
@@ -17,6 +14,7 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            flex-direction: column;
         }
 
         .wmp-video-player {
@@ -25,6 +23,7 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
             border-radius: 10px;
             overflow: hidden;
+            margin-bottom: 20px;
         }
 
         .wmp-video-player video {
@@ -40,7 +39,7 @@
             background: #444;
         }
 
-        .play-pause-btn, .mute-btn, .fullscreen-btn, .download-btn {
+        .play-pause-btn, .mute-btn, .fullscreen-btn, .download-btn, .split-video-btn, .split-audio-btn, .edit-btn {
             background: #555;
             border: none;
             color: #fff;
@@ -50,7 +49,7 @@
             transition: background 0.3s;
         }
 
-        .play-pause-btn:hover, .mute-btn:hover, .fullscreen-btn:hover, .download-btn:hover {
+        .play-pause-btn:hover, .mute-btn:hover, .fullscreen-btn:hover, .download-btn:hover, .split-video-btn:hover, .split-audio-btn:hover, .edit-btn:hover {
             background: #777;
         }
 
@@ -104,6 +103,56 @@
         .resolution-select {
             margin-left: 10px;
         }
+
+        .edit-panel {
+            background: #444;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .edit-panel label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card {
+            width: 200px;
+            height: 100px;
+            padding: 10px;
+            background: #555;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            margin: 10px;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card:hover {
+            background: #777;
+        }
+
+        .card-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
@@ -134,10 +183,32 @@
                 <option value="2160">4K</option>
                 <option value="4320">8K</option>
             </select>
+            <button class="split-video-btn" id="splitVideoBtn">Split Video</button>
+            <button class="split-audio-btn" id="splitAudioBtn">Split Audio</button>
         </div>
     </div>
 
     <input type="file" id="videoInput" multiple accept="video/*">
+    
+    <div class="edit-panel">
+        <label>
+            Noise Reduction: <input type="range" id="noiseReduction" min="0" max="100" value="0">
+        </label>
+        <label>
+            Echo: <input type="range" id="echo" min="0" max="100" value="0">
+        </label>
+        <label>
+            Bass: <input type="range" id="bass" min="0" max="100" value="50">
+        </label>
+        <label>
+            Treble: <input type="range" id="treble" min="0" max="100" value="50">
+        </label>
+        <label>
+            Playback Speed: <input type="range" id="playbackSpeed" min="0.5" max="2" step="0.1" value="1">
+        </label>
+    </div>
+
+    <div class="card-container" id="cardContainer"></div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -154,6 +225,14 @@
             const downloadBtn = document.getElementById('downloadBtn');
             const resolutionSelect = document.getElementById('resolutionSelect');
             const videoInput = document.getElementById('videoInput');
+            const splitVideoBtn = document.getElementById('splitVideoBtn');
+            const splitAudioBtn = document.getElementById('splitAudioBtn');
+            const cardContainer = document.getElementById('cardContainer');
+            const noiseReduction = document.getElementById('noiseReduction');
+            const echo = document.getElementById('echo');
+            const bass = document.getElementById('bass');
+            const treble = document.getElementById('treble');
+            const playbackSpeed = document.getElementById('playbackSpeed');
 
             // Play/Pause functionality
             playPauseBtn.addEventListener('click', () => {
@@ -199,48 +278,126 @@
 
             // Fullscreen functionality
             fullscreenBtn.addEventListener('click', () => {
-                if (!document.fullscreenElement) {
-                    video.requestFullscreen();
+                if (document.fullscreenElement) {
+                    document.exitFullscreen();
                 } else {
-                    if (document.exitFullscreen) {
-                        document.exitFullscreen();
-                    }
+                    video.requestFullscreen();
                 }
             });
 
-            // Download functionality
+            // Download video functionality
             downloadBtn.addEventListener('click', () => {
                 const a = document.createElement('a');
-                a.href = video.currentSrc;
+                a.href = video.src;
                 a.download = 'video.mp4';
-                document.body.appendChild(a);
                 a.click();
-                document.body.removeChild(a);
             });
 
-            // Handle file input
-            videoInput.addEventListener('change', () => {
-                const file = videoInput.files[0];
-                const fileURL = URL.createObjectURL(file);
-                               video.src = fileURL;
-
-                // Reset play button text
-                playPauseBtn.textContent = 'Play';
+            // Resolution change functionality
+            resolutionSelect.addEventListener('change', () => {
+                const resolution = resolutionSelect.value;
+                // Implement the logic to change video resolution
             });
 
-            // Initialize duration display when video metadata is loaded
-            video.addEventListener('loadedmetadata', () => {
-                durationElem.textContent = formatTime(video.duration);
+            // Split video functionality
+            splitVideoBtn.addEventListener('click', () => {
+                // Implement the logic to split video
             });
 
-            // Format time in minutes and seconds
-            function formatTime(time) {
-                const minutes = Math.floor(time / 60);
-                const seconds = Math.floor(time % 60);
-                return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            // Split audio functionality
+            splitAudioBtn.addEventListener('click', () => {
+                // Implement the logic to split audio
+            });
+
+            // Video file input functionality
+            videoInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const url = URL.createObjectURL(file);
+                    video.src = url;
+                    generateThumbnails(file);
+                }
+            });
+
+            // Formatting time in mm:ss
+            function formatTime(seconds) {
+                const minutes = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+            }
+
+            // Edit panel functionality
+            noiseReduction.addEventListener('input', () => {
+                // Implement noise reduction logic
+            });
+
+            echo.addEventListener('input', () => {
+                // Implement echo logic
+            });
+
+            bass.addEventListener('input', () => {
+                // Implement bass adjustment logic
+            });
+
+            treble.addEventListener('input', () => {
+                // Implement treble adjustment logic
+            });
+
+            playbackSpeed.addEventListener('input', () => {
+                video.playbackRate = playbackSpeed.value;
+            });
+
+            // Generate example video cards
+            function createCard(title, url, thumbnail) {
+                const card = document.createElement('div');
+                card.className = 'card';
+                const img = document.createElement('img');
+                img.src = thumbnail;
+                card.appendChild(img);
+                card.addEventListener('click', () => {
+                    video.src = url;
+                });
+                return card;
+            }
+
+            const exampleVideos = [
+                { title: 'Video 1', url: 'path/to/video1.mp4', thumbnail: 'path/to/thumbnail1.jpg' },
+                { title: 'Video 2', url: 'path/to/video2.mp4', thumbnail: 'path/to/thumbnail2.jpg' },
+                { title: 'Video 3', url: 'path/to/video3.mp4', thumbnail: 'path/to/thumbnail3.jpg' }
+            ];
+
+            exampleVideos.forEach(video => {
+                const card = createCard(video.title, video.url, video.thumbnail);
+                cardContainer.appendChild(card);
+            });
+
+            // Generate thumbnails from the video
+            function generateThumbnails(file) {
+                const videoElement = document.createElement('video');
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+
+                videoElement.src = URL.createObjectURL(file);
+                videoElement.addEventListener('loadeddata', () => {
+                    const duration = videoElement.duration;
+                    const step = duration / 5; // generate 5 thumbnails
+                    for (let i = 1; i <= 5; i++) {
+                        setTimeout(() => {
+                            videoElement.currentTime = step * i;
+                        }, i * 500); // delay to ensure videoElement.currentTime is updated
+                    }
+                });
+
+                videoElement.addEventListener('seeked', () => {
+                    canvas.width = videoElement.videoWidth;
+                    canvas.height = videoElement.videoHeight;
+                    context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+                    const thumbnail = canvas.toDataURL();
+                    const card = createCard('Thumbnail', videoElement.src, thumbnail);
+                    cardContainer.appendChild(card);
+                });
             }
         });
     </script>
 </body>
 </html>
-
