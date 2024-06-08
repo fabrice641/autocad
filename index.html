@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg/dist/ffmpeg.min.js"></script>
+    <script src="main.js"></script>
     <title>Advanced Video Player</title>
-   
 </head>
 <body>
     <div class="wmp-video-player">
@@ -28,6 +28,7 @@
                 </div>
             </div>
             <button class="fullscreen-btn" id="fullscreenBtn">Fullscreen</button>
+            <input type="text" id="fileName" placeholder="Output File Name">
             <button class="download-btn" id="downloadBtn">Download</button>
             <select class="resolution-select" id="resolutionSelect">
                 <option value="240">240p</option>
@@ -42,9 +43,7 @@
             <button class="split-audio-btn" id="splitAudioBtn">Split Audio</button>
         </div>
     </div>
-
-   
-        
+    
     <div class="edit-panel">
         <label>
             Noise Reduction: <input type="range" id="noiseReduction" min="0" max="100" value="0">
@@ -65,7 +64,6 @@
 
     <div class="card-container" id="cardContainer"></div>
 
-<script src="main.js"></script>
 
 
 </body>
