@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg/dist/ffmpeg.min.js"></script>
     <script src="main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg/dist/ffmpeg.min.js"></script>
     <title>Advanced Video Player</title>
 </head>
 <body>
     <div class="wmp-video-player">
         <input type="file" id="fileInput" multiple>
         <div id="cardContainer"></div>
-        <video src="" controls id="video"></video>
+        <video src="" controls id="video" autoplay loop></video>
         <div class="controls">
             <button class="play-pause-btn" id="playPauseBtn">Play</button>
             <div class="progress-container">
@@ -63,8 +63,14 @@
     </div>
 
     <div class="card-container" id="cardContainer"></div>
-    
 
+   
+</body>
+</html>
+
+
+
+</script>
   
 
 </body>
