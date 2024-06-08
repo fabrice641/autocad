@@ -1,4 +1,3 @@
- <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', () => {
             const fileInput = document.getElementById('fileInput');
             const cardContainer = document.getElementById('cardContainer');
@@ -231,4 +230,3 @@
                 }
             });
         });
-    </script>
