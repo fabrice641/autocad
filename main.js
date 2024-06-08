@@ -13,7 +13,7 @@
 
     const videoElement = fileInput;
 
-    document.getElementById('video').innerHTML = '<video src="' + videoElement + ' controls ></video>';
+
 
             
     downloadBtn.addEventListener('click', async () => {
@@ -262,6 +262,9 @@ splitAudioBtn.addEventListener('click', () => {
 });
 
 
+
+        const videosWithSrc = getElementsByAttribute('video', 'src');
+document.getElementsByAttribute('video',  'src').InnerText = videoElement;
 
 
 
