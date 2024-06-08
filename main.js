@@ -1,4 +1,5 @@
-document.addEventListener('DOMContentLoaded', () => {
+ <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', () => {
             const fileInput = document.getElementById('fileInput');
             const cardContainer = document.getElementById('cardContainer');
             const downloadBtn = document.getElementById('downloadBtn');
@@ -194,6 +195,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     videoElement.src = videoUrl;
                     videoElement.controls = true;
+
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = videoUrl;
+                    downloadLink.download = `${document.getElementById('fileName').value || 'output'}.mp4`;
+                    downloadLink.textContent = 'Download';
+                    cardContainer.appendChild(downloadLink);
                 } catch (error) {
                     console.error(error);
                     alert("An error occurred while generating the video.");
@@ -224,4 +231,4 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
-    
+    </script>
