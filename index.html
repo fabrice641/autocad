@@ -8,6 +8,11 @@
     <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.10.1"></script>
 </head>
 <body>
+    <video id="my-video" class="video-js" controls preload="auto" poster="" data-setup='' loop>
+        <source src="" type='video/mp4'>
+    </video>
+
+    
     <input type="file" id="fileInput" multiple>
     <select id="resolutionSelect">
         <option value="480">480p</option>
@@ -16,9 +21,7 @@
     </select>
     <button id="downloadBtn">Download Merged Video</button>
     <div id="cardContainer"></div>
-    <video id="my-video" class="video-js" controls preload="auto" poster="" data-setup='' loop>
-        <source src="" type='video/mp4'>
-    </video>
+    
 
     <script>
         $(document).ready(function() {
