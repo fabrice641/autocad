@@ -10,8 +10,28 @@
 </head>
 <body>
     <div class="wmp-video-player">
-        <input type="file" id="fileInput" multiple>
-        <div id="cardContainer"></div>
+
+        
+    <style>
+        .hide { display: none; }
+        .card { margin: 10px; padding: 10px; border: 1px solid #ccc; }
+        #cardContainer { display: flex; flex-wrap: wrap; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.10.2/dist/ffmpeg.min.js"></script>
+    <input type="file" id="fileInput" multiple>
+    <input type="text" id="fileName" placeholder="Output file name">
+    <select id="resolutionSelect">
+        <option value="480">480p</option>
+        <option value="720">720p</option>
+        <option value="1080">1080p</option>
+    </select>
+    <button id="downloadBtn">Download Merged Video</button>
+    <button id="splitVideoBtn">Split Video</button>
+    <button id="splitAudioBtn">Split Audio</button>
+    <div id="cardContainer"></div>
+    <video id="video" controls></video>
+
+       <div id="cardContainer"></div>
 
         
 
@@ -85,13 +105,7 @@
 
     <div class="card-container" id="cardContainer"></div>
 
-   
-</body>
-</html>
-
-
-
-</script>
+  
   
 
 </body>
