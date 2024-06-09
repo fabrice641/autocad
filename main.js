@@ -1,4 +1,19 @@
-        document.addEventListener('DOMContentLoaded', () => {
+  var testVideo = document.querySelector("#testVideo");
+  //testVideo.currentTime = 5;
+
+  testVideo.addEventListener("timeupdate", function () {
+    document.querySelector(".playButton").classList.add('hide');;
+   this.removeEventListener("timeupdate",arguments.callee);
+   // console.log('test');
+  });
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
             const fileInput = document.getElementById('fileInput');
             const cardContainer = document.getElementById('cardContainer');
             const downloadBtn = document.getElementById('downloadBtn');
