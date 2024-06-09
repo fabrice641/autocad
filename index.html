@@ -578,4 +578,35 @@
             </div>
         </div>
     </body>
+
+  <script>
+
+   jQuery(document).ready(function($){
+
+// Click button to activate hidden file input
+$('.fileuploader-btn').on('click', function(){
+$('.fileuploader').click();
+});
+
+// Click above calls the open dialog box
+// Once something is selected the change function will run
+$('.fileuploader').change(function(){
+
+// Create new FileReader as a variable
+var reader = new FileReader();
+
+// Onload Function will run after video has loaded
+reader.onload = function(file){
+var fileContent = file.target.result;
+$('body').append('<video src="' + fileContent + '" width="320" height="240" controls></video>');
+}
+
+// Get the selected video from Dialog
+reader.readAsDataURL(this.files[0]);
+
+});
+
+});
+
+  </script>
  </html>
