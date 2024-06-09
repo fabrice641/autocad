@@ -3,25 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <title>Media Merger</title>
-    <link rel="stylesheet" href="style.css" type="text/css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.10.1"></script>
 </head>
 <body>
-    <video id="my-video" class="video-js" controls preload="auto" poster="" data-setup='' loop>
-        <source src="" type='video/mp4'>
-    </video>
-
-    
-    <input type="file" id="fileInput" multiple>
-    <select id="resolutionSelect">
-        <option value="480">480p</option>
-        <option value="720">720p</option>
-        <option value="1080">1080p</option>
-    </select>
-    <button id="downloadBtn">Download Merged Video</button>
-    <div id="cardContainer"></div>
-    
+    <div class="container mt-5">
+        <div class="row mb-3">
+            <div class="col">
+                <input type="file" class="form-control" id="fileInput" multiple>
+            </div>
+            <div class="col">
+                <select class="form-select" id="resolutionSelect">
+                    <option value="480">480p</option>
+                    <option value="720">720p</option>
+                    <option value="1080">1080p</option>
+                </select>
+            </div>
+            <div class="col">
+                <button class="btn btn-primary" id="downloadBtn">Download Merged Video</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div id="cardContainer" class="d-flex flex-wrap"></div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <video id="my-video" class="video-js w-100" controls preload="auto" poster="" data-setup='' loop>
+                    <source src="" type='video/mp4'>
+                </video>
+            </div>
+        </div>
+    </div>
 
     <script>
         $(document).ready(function() {
@@ -51,10 +66,11 @@
                 const url = URL.createObjectURL(file);
                 const audioElement = $('<audio></audio>').attr({
                     src: url,
-                    controls: true
+                    controls: true,
+                    class: 'w-100'
                 });
 
-                const card = createCard('Audio', url, 'path/to/audio_thumbnail.jpg');
+                const card = createCard('Audio', url, 'https://via.placeholder.com/150');
                 card.append(audioElement);
                 cardContainer.append(card);
 
@@ -63,7 +79,10 @@
 
             function handleImageFile(file) {
                 const url = URL.createObjectURL(file);
-                const imgElement = $('<img>').attr('src', url);
+                const imgElement = $('<img>').attr({
+                    src: url,
+                    class: 'img-fluid'
+                });
 
                 const card = createCard('Image', url, url);
                 card.append(imgElement);
@@ -73,12 +92,17 @@
             }
 
             function createCard(title, url, thumbnail) {
-                const card = $('<div></div>').addClass('card').attr('draggable', true);
-                const img = $('<img>').attr('src', thumbnail);
-                card.append(img);
+                const card = $('<div></div>').addClass('card m-2').attr('draggable', true).css({ width: '150px' });
+                const img = $('<img>').attr('src', thumbnail).addClass('card-img-top');
+                const cardBody = $('<div></div>').addClass('card-body p-2');
+                const cardTitle = $('<h6></h6>').addClass('card-title text-truncate').text(title);
+
+                cardBody.append(cardTitle);
+                card.append(img).append(cardBody);
                 card.on('click', function() {
                     window.open(url, '_blank');
                 });
+
                 return card;
             }
 
@@ -111,7 +135,8 @@
 
                     const downloadLink = $('<a></a>').attr({
                         href: videoUrl,
-                        download: 'merged_video.mp4'
+                        download: 'merged_video.mp4',
+                        class: 'btn btn-success mt-3'
                     }).text('Download');
                     cardContainer.append(downloadLink);
                 } catch (error) {
