@@ -2,96 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <title>Media Merger</title>
+    <link rel="stylesheet"href="style.css"type="text/css">
     <script src="main.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg/dist/ffmpeg.min.js"></script>
-    <title>Advanced Video Player</title>
 </head>
 <body>
-    <div class="wmp-video-player">
-        <style>
-            .hide { display: none; }
-            .card { margin: 10px; padding: 10px; border: 1px solid #ccc; }
-            #cardContainer { display: flex; flex-wrap: wrap; }
-        </style>
-        <input type="file" id="fileInput" multiple>
-        <input type="text" id="fileName" placeholder="Output file name">
-        <select id="resolutionSelect">
-            <option value="480">480p</option>
-            <option value="720">720p</option>
-            <option value="1080">1080p</option>
-        </select>
-        <button id="downloadBtn">Download Merged Video</button>
-        <button id="splitVideoBtn">Split Video</button>
-        <button id="splitAudioBtn">Split Audio</button>
-        <div id="cardContainer"></div>
-        <video id="video" controls></video>
-        
-        <div class="box">
-            <div class="playButton">
-                <svg x="0px" y="0px" viewBox="0 0 40 40" fill="#fff">
-                    <path d="M19.94-0.05C8.87-0.05-0.11,8.92-0.11,20s8.97,20.05,20.05,20.05c11.07,0,20.05-8.97,20.05-20.05S31.01-0.05,19.94-0.05z M15.76,29.64V10.35L28.3,20L15.76,29.64z"/>
-                </svg>  
-            </div>
-            <video id="video" class="bg_video" controls muted playsinline>
-                <source src="https://ak8.picdn.net/shutterstock/videos/1023566578/preview/stock-footage-beautiful-sunrise-world-skyline-planet-earth-from-space-planet-earth-rotating-animation-clip.mp4" type="video/mp4">
-                <div class="video_controls paused">
-                    <button type="button" class="btn_play" title="재생하기"></button>
-                    <button type="button" class="btn_pause" title="멈추기"></button>
-                </div>
-            </video>
-        </div>
-        
-        <div class="controls">
-            <button class="play-pause-btn" id="playPauseBtn">Play</button>
-            <div class="progress-container">
-                <div class="progress-bar" id="progressBar">
-                    <div class="progress" id="progress"></div>
-                </div>
-                <span class="time" id="currentTime">0:00</span> / <span class="time" id="duration">0:00</span>
-            </div>
-            <button class="mute-btn" id="muteBtn">Mute</button>
-            <div class="volume-container">
-                <div class="volume-bar" id="volumeBar">
-                    <div class="volume-level" id="volumeLevel"></div>
-                </div>
-            </div>
-            <button class="fullscreen-btn" id="fullscreenBtn">Fullscreen</button>
-            <input type="text" id="fileName" placeholder="Output File Name">
-            <button class="download-btn" id="downloadBtn">Download</button>
-            <select class="resolution-select" id="resolutionSelect">
-                <option value="240">240p</option>
-                <option value="360">360p</option>
-                <option value="480">480p</option>
-                <option value="720">720p</option>
-                <option value="1080">1080p</option>
-                <option value="2160">4K</option>
-                <option value="4320">8K</option>
-            </select>
-            <button class="split-video-btn" id="splitVideoBtn">Split Video</button>
-            <button class="split-audio-btn" id="splitAudioBtn">Split Audio</button>
-        </div>
-    </div>
-    
-    <div class="edit-panel">
-        <label>
-            Noise Reduction: <input type="range" id="noiseReduction" min="0" max="100" value="0">
-        </label>
-        <label>
-            Echo: <input type="range" id="echo" min="0" max="100" value="0">
-        </label>
-        <label>
-            Bass: <input type="range" id="bass" min="0" max="100" value="50">
-        </label>
-        <label>
-            Treble: <input type="range" id="treble" min="0" max="100" value="50">
-        </label>
-        <label>
-            Playback Speed: <input type="range" id="playbackSpeed" min="0.5" max="2" step="0.1" value="1">
-        </label>
-    </div>
+    <input type="file" id="fileInput" multiple>
+    <select id="resolutionSelect">
+        <option value="480">480p</option>
+        <option value="720">720p</option>
+        <option value="1080">1080p</option>
+    </select>
+    <button id="downloadBtn">Download Merged Video</button>
+    <div id="cardContainer"></div>
+    <video id="video" controls></video>
 
-    <div class="card-container" id="cardContainer"></div>
+    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.10.1"></script>
+    
 </body>
 </html>
