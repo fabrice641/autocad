@@ -12,7 +12,28 @@
     <div class="wmp-video-player">
         <input type="file" id="fileInput" multiple>
         <div id="cardContainer"></div>
-        <video src="" controls id="video" autoplay loop></video>
+
+        
+
+        <div class="box">
+  <div class="playButton">
+    <svg x="0px" y="0px" viewBox="0 0 40 40" fill="#fff">
+      <path d="M19.94-0.05C8.87-0.05-0.11,8.92-0.11,20s8.97,20.05,20.05,20.05c11.07,0,20.05-8.97,20.05-20.05S31.01-0.05,19.94-0.05z M15.76,29.64V10.35L28.3,20L15.76,29.64z"/>
+    </svg>  
+  </div>
+    <video id="video" class="bg_video" controls muted playsinline muted>
+    <source src="https://ak8.picdn.net/shutterstock/videos/1023566578/preview/stock-footage-beautiful-sunrise-world-skyline-planet-earth-from-space-planet-earth-rotating-animation-clip.mp4" type="video/mp4">
+    <div class="video_controls paused">
+      <button type="button" class="btn_play" title="재생하기"></button>
+      <button type="button" class="btn_pause" title="멈추기"></button>
+    </div>
+  </video>
+</div>
+        
+        
+        
+        
+        
         <div class="controls">
             <button class="play-pause-btn" id="playPauseBtn">Play</button>
             <div class="progress-container">
