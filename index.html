@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Media Merger</title>
-    <link href="style.css" rel="stylesheet"type="text/css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.10.1"></script>
 </head>
@@ -54,13 +54,27 @@
                     const file = files[i];
                     const fileType = file.type;
 
-                    if (fileType.startsWith('audio/')) {
+                    if (fileType.startsWith('video/')) {
+                        handleVideoFile(file);
+                    } else if (fileType.startsWith('audio/')) {
                         handleAudioFile(file);
                     } else if (fileType.startsWith('image/')) {
                         handleImageFile(file);
                     }
                 }
             });
+
+            function handleVideoFile(file) {
+                const url = URL.createObjectURL(file);
+                const videoSource = videoElement.find('source');
+                videoSource.attr('src', url);
+                videoElement[0].load();
+
+                const card = createCard('Video', url, 'https://via.placeholder.com/150');
+                cardContainer.append(card);
+
+                tracks.push({ type: 'video', file });
+            }
 
             function handleAudioFile(file) {
                 const url = URL.createObjectURL(file);
@@ -117,10 +131,11 @@
                         await ffmpeg.FS('writeFile', track.file.name, await fetchFile(track.file));
                     }
 
-                    const imageInputs = tracks.filter(track => track.type === 'image').map((track, index) => `[${index}:v]scale=-1:${resolution},setsar=1:1[v${index}]`).join('; ');
-                    const audioInputs = tracks.filter(track => track.type === 'audio').map((track, index) => `[${index + tracks.filter(t => t.type === 'image').length}:a]`).join('; ');
+                    const videoInputs = tracks.filter(track => track.type === 'video').map((track, index) => `[${index}:v]scale=-1:${resolution},setsar=1:1[v${index}]`).join('; ');
+                    const imageInputs = tracks.filter(track => track.type === 'image').map((track, index) => `[${index + tracks.filter(t => t.type === 'video').length}:v]scale=-1:${resolution},setsar=1:1[v${index + tracks.filter(t => t.type === 'video').length}]`).join('; ');
+                    const audioInputs = tracks.filter(track => track.type === 'audio').map((track, index) => `[${index + tracks.filter(t => t.type === 'video' || t.type === 'image').length}:a]`).join('; ');
 
-                    const filterComplex = `${imageInputs}; ${audioInputs}`;
+                    const filterComplex = `${videoInputs}; ${imageInputs}; ${audioInputs}`;
 
                     const inputs = tracks.map(track => `-i ${track.file.name}`).join(' ');
 
