@@ -3,7 +3,7 @@
             const cardContainer = document.getElementById('cardContainer');
             const downloadBtn = document.getElementById('downloadBtn');
             const resolutionSelect = document.getElementById('resolutionSelect');
-            const videoElement = document.getElementById('video');
+            const videoElement = document.getElementById('my-video');
             const tracks = [];
 
             fileInput.addEventListener('change', (e) => {
