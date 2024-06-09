@@ -4,6 +4,9 @@
             const downloadBtn = document.getElementById('downloadBtn');
             const resolutionSelect = document.getElementById('resolutionSelect');
             const videoElement = document.getElementById('my-video');
+ 
+            document.getElementsByAttribute('poster').innerTEXT = fileInput;
+
             const tracks = [];
 
             fileInput.addEventListener('change', (e) => {
